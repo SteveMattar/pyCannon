@@ -1,0 +1,48 @@
+from enum import Enum
+
+
+# Level
+class GameLevel(Enum):
+    EASY = 1,
+    MEDIUM = 2,
+    HARD = 3
+
+
+# Colors
+class Colors():
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    RED = (255, 50, 50)
+    YELLOW = (255, 255, 0)
+    GREEN = (0, 255, 50)
+    BLUE = (50, 50, 255)
+    GREY = (200, 200, 200)
+    ORANGE = (200, 100, 50)
+    CYAN = (0, 255, 255)
+    MAGENTA = (255, 0, 255)
+    TRANS = (1, 1, 1)
+
+
+# Config
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 400
+FPS = 60
+LEVEL = GameLevel.MEDIUM
+PLAYER_BALL_RADIUS = 10
+PLAYER_BALL_COLOR = Colors.RED
+TARGET_BALL_RADIUS = 20
+TARGET_BALL_COLOR = Colors.YELLOW
+MAX_TARGETS = 15
+
+
+# Player physics
+GRAVITY = 0.09
+SPEED_INCREASE_RATE = 0.038
+SPEED_DECREASE_RATE = 0.038
+FALL_MULTIPLIER = 2.0
+MAX_MOVE_SPEED = 4.0
+MAX_FASTMOVE_SPEED = 5.0
+MAX_FALL_SPEED = 5.5
+CANNON_FIREPOWER = 180
+MASS = 20
+
