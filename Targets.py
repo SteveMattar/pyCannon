@@ -7,8 +7,9 @@ from Vector import Vector2
 class Targets:
     def __init__(self):
         self.size = TARGET_BALL_RADIUS
-        self.position = Vector2(WINDOW_WIDTH - self.size / 2, random.randrange(WINDOW_HEIGHT - WINDOW_HEIGHT * 0.9, WINDOW_HEIGHT - WINDOW_HEIGHT * 0.1))
-        self.velocity = Vector2((random.randrange(1, MAX_MOVE_SPEED) * -1), 0)
+        self.position = Vector2(WINDOW_WIDTH, random.randrange(WINDOW_HEIGHT - WINDOW_HEIGHT * 0.9,
+                                                               WINDOW_HEIGHT - WINDOW_HEIGHT * 0.1, self.size + 5))
+        self.velocity = Vector2((random.uniform(-5.0, -1.5)), random.uniform(-0.5, -0.1))
         self.image = pg.Surface([self.size, self.size], pg.SRCALPHA)
         self.rect = self.image.get_rect()
         self.image.fill((0, 0, 0, 0))
@@ -16,7 +17,7 @@ class Targets:
 
         self.state = 0
         self.crushed = False
-        self.on_ground = False
+        self.out = False
         self.collision = True
 
     def die(self, core, instantly, crushed):
@@ -29,7 +30,6 @@ class Targets:
                 self.state = -1
                 core.get_sound().play('kill_mob', 0, 0.5)
                 self.collision = False
-
             else:
                 self.velocity.y = -4
                 core.get_sound().play('shot', 0, 0.5)
@@ -47,30 +47,32 @@ class Targets:
                         self.die(core, instantly=False, crushed=True)
 
     def update(self, core):
-        if self.state == 0:
+        self.out = self.out_of_play()
 
-            # if not self.on_ground:
-            #     self.velocity.y += GRAVITY
+        # in play
+        if self.state == 0:
+            if not self.out:
+                self.velocity.y += GRAVITY
+            else:
+                self.die(core, instantly=True, crushed=False)
 
             self.position.add(self.velocity)
             self.rect.x = self.position.x
             self.rect.y = self.position.y
 
-            self.check_map_borders(core)
 
+        # dying
         elif self.state == -1:
             if self.crushed:
                 core.get_game().get_targets().remove(self)
             else:
-                # self.velocity.y += GRAVITY
+                self.velocity.y += GRAVITY
                 self.rect.y += self.position.y
-                self.check_map_borders(core)
+                if self.out:
+                    self.die(core, instantly=True, crushed=False)
 
     def render(self, core):
         core.screen.blit(self.image, self.rect)
 
-    def check_map_borders(self, core):
-        if self.rect.y >= WINDOW_HEIGHT:
-            self.die(core, True, False)
-        if self.rect.x <= 1 and self.velocity.x < 0:
-            self.velocity.x = - self.velocity.x
+    def out_of_play(self):
+        return self.position.x < 0 or self.position.x > WINDOW_WIDTH or self.position.y >= WINDOW_HEIGHT - self.size or self.position.y < 0

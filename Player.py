@@ -47,8 +47,7 @@ class Player(object):
             self.velocity.mult(0)
 
     def out_of_play(self):
-        # return (0 <= self.rect.y <= WINDOW_HEIGHT) and (0 <= self.rect.x <= WINDOW_WIDTH)
-        return self.position.x < 0 or self.position.x > WINDOW_WIDTH or self.position.y >= WINDOW_HEIGHT - self.size
+        return self.position.x < 0 or self.position.x > WINDOW_WIDTH or self.position.y >= WINDOW_HEIGHT - self.size or self.position.y < 0
 
     def is_dead(self):
         return self.out_of_play() or self.dead
