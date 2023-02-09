@@ -21,6 +21,7 @@ class Colors():
     CYAN = (0, 255, 255)
     MAGENTA = (255, 0, 255)
     TRANS = (1, 1, 1)
+    SKY = (92, 148, 252)
 
 
 # Config

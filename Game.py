@@ -33,7 +33,7 @@ class Game(object):
 
     def load(self):
         self.sky = pg.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
-        self.sky.fill((pg.Color('#5c94fc')))
+        self.sky.fill(Colors.SKY)
 
         # # Targets
         for target in range(0, MAX_TARGETS):

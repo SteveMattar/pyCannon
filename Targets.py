@@ -9,9 +9,10 @@ class Targets:
         self.size = TARGET_BALL_RADIUS
         self.position = Vector2(WINDOW_WIDTH - self.size / 2, random.randrange(WINDOW_HEIGHT - WINDOW_HEIGHT * 0.9, WINDOW_HEIGHT - WINDOW_HEIGHT * 0.1))
         self.velocity = Vector2((random.randrange(1, MAX_MOVE_SPEED) * -1), 0)
-        self.image = pg.Surface([self.size, self.size])
+        self.image = pg.Surface([self.size, self.size], pg.SRCALPHA)
         self.rect = self.image.get_rect()
-        self.image.fill(TARGET_BALL_COLOR)
+        self.image.fill((0, 0, 0, 0))
+        pg.draw.circle(self.image, TARGET_BALL_COLOR, [self.size / 2, self.size / 2], self.size / 2)
 
         self.state = 0
         self.crushed = False

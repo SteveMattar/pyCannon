@@ -12,8 +12,9 @@ class Player(object):
         self.mass = MASS
         self.cannon_firepower = CANNON_FIREPOWER
         self.rect = pg.Rect(self.position.x, self.position.y, self.size, self.size)
-        self.image = pg.Surface([self.size, self.size])
-        self.image.fill(PLAYER_BALL_COLOR)
+        self.image = pg.Surface([self.size, self.size], pg.SRCALPHA)
+        self.image.fill((0, 0, 0, 0))
+        pg.draw.circle(self.image, PLAYER_BALL_COLOR, [self.size / 2, self.size / 2], self.size / 2)
         self.dead = False
         self.visible = True
 
