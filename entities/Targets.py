@@ -1,7 +1,7 @@
 import pygame as pg
 import random
-from Config import *
-from Vector import Vector2
+from config.Config import *
+from utils.Vector import Vector2
 
 
 class Targets:

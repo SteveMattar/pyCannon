@@ -3,10 +3,10 @@ from os import environ
 import pygame as pg
 from pygame.locals import *
 
-from Config import *
-from Game import Game
-from MenuManager import MenuManager
-from Sound import Sound
+from config.Config import *
+from game.Game import Game
+from screens.MenuManager import MenuManager
+from entities.Sound import Sound
 
 
 class Core(object):

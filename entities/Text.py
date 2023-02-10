@@ -7,7 +7,7 @@ class Text(object):
         self.fontsize = fontsize
         self.rectcenter = rectcenter
         self.textcolor = textcolor
-        self.font = pg.font.Font('fonts/emulogic.ttf', fontsize)
+        self.font = pg.font.Font('assets/fonts/emulogic.ttf', fontsize)
         self.text = self.font.render(string, False, textcolor)
         self.rect = self.text.get_rect(center=rectcenter)
         self.y_offset = 0

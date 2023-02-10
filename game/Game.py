@@ -1,9 +1,9 @@
 import pygame as pg
-from Config import *
-from GameUI import GameUI
-from Player import Player
-from Targets import Targets
-from Text import Text
+from config.Config import *
+from game.GameUI import GameUI
+from entities.Player import Player
+from entities.Targets import Targets
+from entities.Text import Text
 
 
 class Game(object):

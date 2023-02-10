@@ -1,8 +1,8 @@
 import pygame as pg
 
-from LoadingMenu import LoadingMenu
-from LevelMenu import LevelMenu
-from MainMenu import MainMenu
+from screens.LoadingMenu import LoadingMenu
+from screens.LevelMenu import LevelMenu
+from screens.MainMenu import MainMenu
 
 
 class MenuManager(object):

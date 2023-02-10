@@ -1,7 +1,7 @@
 import pygame as pg
 
-from Config import *
-from Text import Text
+from config.Config import *
+from entities.Text import Text
 
 
 class LoadingMenu(object):

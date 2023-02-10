@@ -1,6 +1,6 @@
-from Vector import Vector2
 import pygame as pg
-from Config import *
+from utils.Vector import Vector2
+from config.Config import *
 
 
 class Player(object):
