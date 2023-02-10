@@ -27,6 +27,7 @@ class Game(object):
 
         self.player = Player()
         self.gameUI = GameUI()
+        self.game_over = False
 
     def load(self):
         self.sky = pg.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -44,6 +45,8 @@ class Game(object):
         self.tick = 0
         self.time = TIME(self.level)
 
+        self.game_over = False
+
         self.load()
 
         self.get_player().reset(reset_all)
@@ -53,6 +56,7 @@ class Game(object):
 
     def set_level(self, level):
         self.level = level
+        self.time = TIME(level)
 
     def get_player(self):
         return self.player
@@ -132,6 +136,8 @@ class Game(object):
         self.get_player().reset_move()
         for target in self.get_targets():
             target.reset_move()
+        self.game_over = True
+        core.get_sound().play('game_over', 0, 0.5)
 
     def update(self, core):
 

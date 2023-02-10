@@ -3,6 +3,7 @@ import pygame as pg
 from screens.LoadingMenu import LoadingMenu
 from screens.LevelMenu import LevelMenu
 from screens.MainMenu import MainMenu
+from screens.GameOverMenu import GameOverMenu
 
 
 class MenuManager(object):
@@ -17,6 +18,7 @@ class MenuManager(object):
         self.main_menu = MainMenu()
         self.level_menu = LevelMenu()
         self.loading_menu = LoadingMenu(core)
+        self.game_over_menu = GameOverMenu()
 
     def update(self, core):
         if self.currentGameState == 'MainMenu':
@@ -30,6 +32,11 @@ class MenuManager(object):
 
         elif self.currentGameState == 'Game':
             core.get_game().update(core)
+            if core.get_game().game_over:
+                self.currentGameState = 'GameOver'
+
+        if self.currentGameState == 'GameOver':
+            self.game_over_menu.update(core)
 
     def render(self, core):
         if self.currentGameState == 'MainMenu':
@@ -46,6 +53,9 @@ class MenuManager(object):
         elif self.currentGameState == 'Game':
             core.get_game().render(core)
             core.get_game().get_ui().render(core)
+
+        elif self.currentGameState == 'GameOver':
+            self.game_over_menu.render(core)
 
         pg.display.update()
 

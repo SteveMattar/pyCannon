@@ -41,8 +41,8 @@ class Core(object):
     def input(self):
         if self.get_menu_manager().currentGameState == 'Game':
             self.input_player()
-        elif self.get_menu_manager().currentGameState == 'MainMenu':
-            self.input_main_menu()
+        elif self.get_menu_manager().currentGameState == 'MainMenu' or self.get_menu_manager().currentGameState == 'GameOver':
+            self.input_menu()
         elif self.get_menu_manager().currentGameState == 'LevelMenu':
             self.input_level_menu()
 
@@ -66,7 +66,7 @@ class Core(object):
                 if e.button == 1:  # left click
                     self.click = False
 
-    def input_main_menu(self):
+    def input_menu(self):
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 self.run = False
