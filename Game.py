@@ -23,7 +23,7 @@ class Game(object):
         self.score_time = 0
 
         self.tick = 0
-        self.time = TIME
+        self.time = TIME(self.level)
 
         self.player = Player()
         self.gameUI = GameUI()
@@ -33,7 +33,7 @@ class Game(object):
         self.sky.fill(Colors.SKY)
 
         # # Targets
-        self.targets.append(Targets())
+        self.targets.append(Targets(self.level))
 
     def reset(self, reset_all):
         self.targets = []
@@ -42,7 +42,7 @@ class Game(object):
         self.sky = None
 
         self.tick = 0
-        self.time = TIME
+        self.time = TIME(self.level)
 
         self.load()
 
@@ -88,8 +88,8 @@ class Game(object):
         self.get_player().update(core)
 
     def update_targets(self, core):
-        if len(self.targets) < MAX_TARGETS:
-            self.targets.append(Targets())
+        if len(self.targets) < MAX_TARGETS(self.level):
+            self.targets.append(Targets(self.level))
         for target in self.targets:
             target.update(core)
             self.targets_collisions(core)
@@ -101,13 +101,13 @@ class Game(object):
 
         # Time updates only if map not in event
         self.tick += 1
-        if self.tick % 40 == 0:
+        if self.tick % 40 == 0 and self.time != 0:
             self.time -= 1
             self.tick = 0
         if self.time == 100 and self.tick == 1:
             core.get_sound().start_fast_music(core)
         elif self.time == 0:
-            self.player_death(core)
+            self.end_game(core)
 
     def update_score_time(self):
         """
@@ -125,11 +125,10 @@ class Game(object):
         for target in self.targets:
             target.check_collision_with_player(core)
 
-    def player_death(self, core):
+    def end_game(self, core):
         self.get_player().reset_move()
-
-    def player_win(self, core):
-        self.get_player().reset_move()
+        for target in self.get_targets():
+            target.reset_move()
 
     def update(self, core):
 

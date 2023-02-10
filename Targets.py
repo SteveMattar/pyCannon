@@ -5,11 +5,12 @@ from Vector import Vector2
 
 
 class Targets:
-    def __init__(self):
+    def __init__(self, level):
         self.size = TARGET_BALL_RADIUS
         self.position = Vector2(WINDOW_WIDTH, random.randrange(WINDOW_HEIGHT - WINDOW_HEIGHT * 0.9,
                                                                WINDOW_HEIGHT - WINDOW_HEIGHT * 0.1, self.size + 5))
-        self.velocity = Vector2((random.uniform(MIN_MOVE_SPEED, MAX_MOVE_SPEED)), random.uniform(MIN_FALL_SPEED, MAX_FALL_SPEED))
+        self.velocity = Vector2((random.uniform(MIN_MOVE_SPEED(level), MAX_MOVE_SPEED(level))),
+                                random.uniform(MIN_FALL_SPEED, MAX_FALL_SPEED))
         self.image = pg.Surface([self.size, self.size], pg.SRCALPHA)
         self.rect = self.image.get_rect()
         self.image.fill((0, 0, 0, 0))
@@ -43,7 +44,7 @@ class Targets:
         if self.collision:
             if self.rect.colliderect(core.get_game().get_player().rect):
                 if self.is_moving:
-                    if core.get_game().get_player().velocity.y > 0:
+                    if core.get_game().get_player().velocity.y < 0:
                         self.die(core, instantly=False, crushed=True)
 
     def update(self, core):
@@ -75,3 +76,6 @@ class Targets:
 
     def out_of_play(self):
         return self.position.x < 0 or self.position.x > WINDOW_WIDTH or self.position.y >= WINDOW_HEIGHT - self.size or self.position.y < 0
+
+    def reset_move(self):
+        self.velocity = Vector2(0, 0)
