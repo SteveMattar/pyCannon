@@ -19,7 +19,7 @@ class LoadingMenu(object):
                 core.get_sound().play('overworld', 999999, 0.5)
             else:
                 core.menu_manager.currentGameState = 'MainMenu'
-                self.set_text_and_type('WORLD ' + core.game.get_level(), True)
+                self.set_text_and_type('LEVEL ' + str(core.game.get_level()), True)
                 core.get_game().reset(True)
 
     def set_text_and_type(self, text, loading_type):

@@ -2,9 +2,13 @@ import pygame as pg
 
 
 class Text(object):
-    def __init__(self, text, fontsize, rectcenter, textcolor=(255, 255, 255)):
+    def __init__(self, string, fontsize, rectcenter, textcolor=(255, 255, 255)):
+        self.string = string
+        self.fontsize = fontsize
+        self.rectcenter = rectcenter
+        self.textcolor = textcolor
         self.font = pg.font.Font('fonts/emulogic.ttf', fontsize)
-        self.text = self.font.render(text, False, textcolor)
+        self.text = self.font.render(string, False, textcolor)
         self.rect = self.text.get_rect(center=rectcenter)
         self.y_offset = 0
 
@@ -17,3 +21,6 @@ class Text(object):
 
     def render(self, core):
         core.screen.blit(self.text, self.rect)
+
+    def change_color(self, textcolor):
+        self.text = self.font.render(self.string, False, textcolor)

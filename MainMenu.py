@@ -12,3 +12,7 @@ class MainMenu(object):
         self.title.render(core)
         self.to_start_text.render(core)
         self.creator.render(core)
+
+    def update(self, core):
+        core.get_game().reset(True)
+        core.get_sound().stop('overworld')

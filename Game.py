@@ -49,7 +49,10 @@ class Game(object):
         self.get_player().reset(reset_all)
 
     def get_level(self):
-        return str(LEVEL)
+        return self.level
+
+    def set_level(self, level):
+        self.level = level
 
     def get_player(self):
         return self.player
@@ -104,7 +107,7 @@ class Game(object):
         if self.tick % 40 == 0 and self.time != 0:
             self.time -= 1
             self.tick = 0
-        if self.time == 100 and self.tick == 1:
+        if self.time == int(TIME(self.level) * 0.2) and self.tick == 1:
             core.get_sound().start_fast_music(core)
         elif self.time == 0:
             self.end_game(core)

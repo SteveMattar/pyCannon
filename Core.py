@@ -28,7 +28,6 @@ class Core(object):
         self.menu_manager = MenuManager(self)
 
         self.run = True
-        self.keySpace = False
         self.click = False
         self.mouse = pg.mouse.get_pos()
 
@@ -42,8 +41,10 @@ class Core(object):
     def input(self):
         if self.get_menu_manager().currentGameState == 'Game':
             self.input_player()
-        else:
-            self.input_menu()
+        elif self.get_menu_manager().currentGameState == 'MainMenu':
+            self.input_main_menu()
+        elif self.get_menu_manager().currentGameState == 'LevelMenu':
+            self.input_level_menu()
 
     def input_player(self):
         self.mouse = pg.mouse.get_pos()
@@ -53,15 +54,9 @@ class Core(object):
             if e.type == pg.QUIT:
                 self.run = False
 
-            elif e.type == KEYDOWN:
+            if e.type == KEYDOWN:
                 if e.key == K_ESCAPE:
-                    self.run = False
-                elif e.key == K_SPACE:
-                    self.keySpace = True
-
-            elif e.type == KEYUP:
-                if e.key == K_SPACE:
-                    self.keySpace = False
+                    self.menu_manager.show_main_menu()
 
             if e.type == MOUSEBUTTONDOWN:
                 if e.button == 1:  # left click
@@ -71,14 +66,32 @@ class Core(object):
                 if e.button == 1:  # left click
                     self.click = False
 
-    def input_menu(self):
+    def input_main_menu(self):
         for e in pg.event.get():
             if e.type == pg.QUIT:
                 self.run = False
 
             elif e.type == KEYDOWN:
                 if e.key == K_RETURN:
-                    self.get_menu_manager().start_loading()
+                    self.menu_manager.select_level()
+                elif e.key == K_ESCAPE:
+                    self.run = False
+
+    def input_level_menu(self):
+        for e in pg.event.get():
+            if e.type == pg.QUIT:
+                self.run = False
+
+            elif e.type == KEYDOWN:
+                if e.key == K_RETURN:
+                    self.game.set_level(self.menu_manager.level_menu.selection)
+                    self.menu_manager.start_loading()
+                elif e.key == K_UP:
+                    self.menu_manager.level_menu.up()
+                elif e.key == K_DOWN:
+                    self.menu_manager.level_menu.down()
+                elif e.key == K_ESCAPE:
+                    self.menu_manager.show_main_menu()
 
     def update(self):
         self.get_menu_manager().update(self)
