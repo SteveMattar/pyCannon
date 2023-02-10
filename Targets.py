@@ -15,7 +15,7 @@ class Targets:
         self.image.fill((0, 0, 0, 0))
         pg.draw.circle(self.image, TARGET_BALL_COLOR, [self.size / 2, self.size / 2], self.size / 2)
 
-        self.state = 0
+        self.is_moving = True
         self.crushed = False
         self.out = False
         self.collision = True
@@ -27,13 +27,13 @@ class Targets:
 
             if crushed:
                 self.crushed = True
-                self.state = -1
-                core.get_sound().play('kill_mob', 0, 0.5)
+                self.is_moving = False
+                core.get_sound().play('kill_target', 0, 0.5)
                 self.collision = False
             else:
                 self.velocity.y = -4
                 core.get_sound().play('shot', 0, 0.5)
-                self.state = -1
+                self.is_moving = False
                 self.collision = False
 
         else:
@@ -42,7 +42,7 @@ class Targets:
     def check_collision_with_player(self, core):
         if self.collision:
             if self.rect.colliderect(core.get_game().get_player().rect):
-                if self.state != -1:
+                if self.is_moving:
                     if core.get_game().get_player().velocity.y > 0:
                         self.die(core, instantly=False, crushed=True)
 
@@ -50,7 +50,7 @@ class Targets:
         self.out = self.out_of_play()
 
         # in play
-        if self.state == 0:
+        if self.is_moving:
             if not self.out:
                 self.velocity.y += GRAVITY
             else:
@@ -60,9 +60,8 @@ class Targets:
             self.rect.x = self.position.x
             self.rect.y = self.position.y
 
-
         # dying
-        elif self.state == -1:
+        else:
             if self.crushed:
                 core.get_game().get_targets().remove(self)
             else:

@@ -31,9 +31,9 @@ class Player(object):
 
     def update(self, core):
         if core.click:
-            self.fire(core)
+            self._fire(core)
 
-        if self.out_of_play():
+        if self._out_of_play():
             self.reset(False)
 
         self.velocity.add(self.accuracy)
@@ -48,11 +48,11 @@ class Player(object):
             self.position.y = WINDOW_HEIGHT - self.size
             self.velocity.mult(0)
 
-    def out_of_play(self):
+    def _out_of_play(self):
         return self.position.x < 0 or self.position.x > WINDOW_WIDTH or self.position.y >= WINDOW_HEIGHT - self.size or self.position.y < 0
 
-    def fire(self, core):
-        if not self.is_moving and not self.out_of_play():
+    def _fire(self, core):
+        if not self.is_moving and not self._out_of_play():
             force = Vector2(core.mouse[0], core.mouse[1])
             force.sub(self.position)
             force.normalise()

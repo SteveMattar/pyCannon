@@ -17,7 +17,6 @@ class LoadingMenu(object):
             if self.loading_type:
                 core.menu_manager.currentGameState = 'Game'
                 core.get_sound().play('overworld', 999999, 0.5)
-                core.get_game().in_event = False
             else:
                 core.menu_manager.currentGameState = 'MainMenu'
                 self.set_text_and_type('WORLD ' + core.game.get_level(), True)

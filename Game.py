@@ -4,7 +4,6 @@ from GameUI import GameUI
 from Player import Player
 from Targets import Targets
 from Text import Text
-from Event import Event
 
 
 class Game(object):
@@ -23,12 +22,10 @@ class Game(object):
         self.score_for_killing_targets = 100
         self.score_time = 0
 
-        self.in_event = False
         self.tick = 0
-        self.time = 400
+        self.time = TIME
 
         self.player = Player()
-        self.event = Event()
         self.gameUI = GameUI()
 
     def load(self):
@@ -42,15 +39,13 @@ class Game(object):
         self.targets = []
         self.level = LEVEL
 
-        self.in_event = False
         self.sky = None
 
         self.tick = 0
-        self.time = 400
+        self.time = TIME
 
         self.load()
 
-        self.get_event().reset()
         self.get_player().reset(reset_all)
 
     def get_level(self):
@@ -58,9 +53,6 @@ class Game(object):
 
     def get_player(self):
         return self.player
-
-    def get_event(self):
-        return self.event
 
     def get_ui(self):
         return self.gameUI
@@ -70,12 +62,12 @@ class Game(object):
 
     def spawn_score_text(self, x, y, score=None):
         """
-        This text appears when you, for example, kill a mob. It shows how many points
+        This text appears when you, for example, kill a target. It shows how many points
         you got.
         """
 
-        # Score is none only when you kill a mob. If you got a killstreak,
-        # amount of points for killing a mob will increase: 100, 200, 400, 800...
+        # Score is none only when you kill a target. If you got a killstreak,
+        # amount of points for killing a target will increase: 100, 200, 400, 800...
         # So you don't know how many points you should add.
         if score is None:
             self.text_objects.append(Text(str(self.score_for_killing_targets), 16, (x, y)))
@@ -100,8 +92,7 @@ class Game(object):
             self.targets.append(Targets())
         for target in self.targets:
             target.update(core)
-            if not self.in_event:
-                self.entity_collisions(core)
+            self.targets_collisions(core)
 
     def update_time(self, core):
         """
@@ -109,20 +100,19 @@ class Game(object):
         """
 
         # Time updates only if map not in event
-        if not self.in_event:
-            self.tick += 1
-            if self.tick % 40 == 0:
-                self.time -= 1
-                self.tick = 0
-            if self.time == 100 and self.tick == 1:
-                core.get_sound().start_fast_music(core)
-            elif self.time == 0:
-                self.player_death(core)
+        self.tick += 1
+        if self.tick % 40 == 0:
+            self.time -= 1
+            self.tick = 0
+        if self.time == 100 and self.tick == 1:
+            core.get_sound().start_fast_music(core)
+        elif self.time == 0:
+            self.player_death(core)
 
     def update_score_time(self):
         """
-        When player kill mobs in a row, score for each mob
-        will increase. When player stops kill mobs, points
+        When player kill targets in a row, score for each target
+        will increase. When player stops kill targets, points
         will reset to 100. This function updates these points.
         """
         if self.score_for_killing_targets != 100:
@@ -131,29 +121,21 @@ class Game(object):
             if pg.time.get_ticks() > self.score_time + 750:
                 self.score_for_killing_targets //= 2
 
-    def entity_collisions(self, core):
+    def targets_collisions(self, core):
         for target in self.targets:
             target.check_collision_with_player(core)
 
     def player_death(self, core):
-        self.in_event = True
         self.get_player().reset_move()
-        self.get_event().start_kill(core, game_over=True)
 
     def player_win(self, core):
-        self.in_event = True
         self.get_player().reset_move()
-        self.get_event().start_win(core)
 
     def update(self, core):
 
         # All targets
         self.update_targets(core)
-
-        if not core.get_game().in_event:
-            self.update_player(core)
-        else:
-            self.get_event().update(core)
+        self.update_player(core)
 
         # Text which represent how mapy points player get
         for text_object in self.text_objects:

@@ -19,7 +19,7 @@ class Sound(object):
         self.sounds['mushroom_eat'] = pg.mixer.Sound('sounds/mushroomeat.wav')
         self.sounds['death'] = pg.mixer.Sound('sounds/death.wav')
         self.sounds['pipe'] = pg.mixer.Sound('sounds/pipe.wav')
-        self.sounds['kill_mob'] = pg.mixer.Sound('sounds/kill_mob.wav')
+        self.sounds['kill_target'] = pg.mixer.Sound('sounds/kill_mob.wav')
         self.sounds['game_over'] = pg.mixer.Sound('sounds/gameover.wav')
         self.sounds['scorering'] = pg.mixer.Sound('sounds/scorering.wav')
         self.sounds['fireball'] = pg.mixer.Sound('sounds/fireball.wav')
