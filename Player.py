@@ -15,16 +15,14 @@ class Player(object):
         self.image = pg.Surface([self.size, self.size], pg.SRCALPHA)
         self.image.fill((0, 0, 0, 0))
         pg.draw.circle(self.image, PLAYER_BALL_COLOR, [self.size / 2, self.size / 2], self.size / 2)
-        self.dead = False
-        self.visible = True
-
         self.score = 0
+        self.is_moving = False
 
-    def launch(self, f):
-        self.apply_force(f)
-        self.visible = True
+    def _launch(self, f):
+        self._apply_force(f)
+        self.is_moving = True
 
-    def apply_force(self, f):
+    def _apply_force(self, f):
 
         # make a copy to preserve the original vector values
         fcopy = f.get_copy()
@@ -34,14 +32,18 @@ class Player(object):
     def update(self, core):
         if core.click:
             self.fire(core)
+
+        if self.out_of_play():
+            self.reset(False)
+
         self.velocity.add(self.accuracy)
         self.position.add(self.velocity)
         self.accuracy.mult(0)
-        self.constrain()
+        self._constrain()
         self.rect.x = self.position.x
         self.rect.y = self.position.y
 
-    def constrain(self):
+    def _constrain(self):
         if self.position.y > WINDOW_HEIGHT - self.size:
             self.position.y = WINDOW_HEIGHT - self.size
             self.velocity.mult(0)
@@ -49,29 +51,25 @@ class Player(object):
     def out_of_play(self):
         return self.position.x < 0 or self.position.x > WINDOW_WIDTH or self.position.y >= WINDOW_HEIGHT - self.size or self.position.y < 0
 
-    def is_dead(self):
-        return self.out_of_play() or self.dead
-
     def fire(self, core):
-        if not self.is_dead():
+        if not self.is_moving and not self.out_of_play():
             force = Vector2(core.mouse[0], core.mouse[1])
             force.sub(self.position)
             force.normalise()
             force.mult(self.cannon_firepower)
-            self.launch(force)
+            self._launch(force)
             core.get_sound().play('fireball', 0, 0.5)
         else:
             core.get_sound().play('brick_break', 0, 0.5)
 
     def reset(self, reset_all):
-        self.position = Vector2(0, 0)
+        self.position = Vector2(10, WINDOW_HEIGHT - self.size - 10)
         self.velocity = Vector2(0, 0)
         self.accuracy = Vector2(0, 0)
+        self.is_moving = False
 
         if reset_all:
             self.score = 0
-            self.dead = False
-            self.visible = True
 
     def reset_move(self):
         self.velocity = Vector2(0, 0)
@@ -80,5 +78,4 @@ class Player(object):
         self.score += count
 
     def render(self, core):
-        if self.visible:
-            core.screen.blit(self.image, self.rect)
+        core.screen.blit(self.image, self.rect)

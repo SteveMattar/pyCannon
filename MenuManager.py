@@ -28,7 +28,7 @@ class MenuManager(object):
 
     def render(self, core):
         if self.currentGameState == 'MainMenu':
-            core.get_game().render_map(core)
+            core.get_game().render_sky(core)
             self.main_menu.render(core)
 
         elif self.currentGameState == 'Loading':

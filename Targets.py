@@ -9,7 +9,7 @@ class Targets:
         self.size = TARGET_BALL_RADIUS
         self.position = Vector2(WINDOW_WIDTH, random.randrange(WINDOW_HEIGHT - WINDOW_HEIGHT * 0.9,
                                                                WINDOW_HEIGHT - WINDOW_HEIGHT * 0.1, self.size + 5))
-        self.velocity = Vector2((random.uniform(-5.0, -1.5)), random.uniform(-0.5, -0.1))
+        self.velocity = Vector2((random.uniform(MIN_MOVE_SPEED, MAX_MOVE_SPEED)), random.uniform(MIN_FALL_SPEED, MAX_FALL_SPEED))
         self.image = pg.Surface([self.size, self.size], pg.SRCALPHA)
         self.rect = self.image.get_rect()
         self.image.fill((0, 0, 0, 0))
@@ -22,7 +22,7 @@ class Targets:
 
     def die(self, core, instantly, crushed):
         if not instantly:
-            core.get_game().get_player().add_score(core.get_game().score_for_killing_mob)
+            core.get_game().get_player().add_score(core.get_game().score_for_killing_targets)
             core.get_game().spawn_score_text(self.rect.x + 16, self.rect.y)
 
             if crushed:

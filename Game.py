@@ -36,8 +36,7 @@ class Game(object):
         self.sky.fill(Colors.SKY)
 
         # # Targets
-        for target in range(0, MAX_TARGETS):
-            self.targets.append(Targets())
+        self.targets.append(Targets())
 
     def reset(self, reset_all):
         self.targets = []
@@ -96,7 +95,9 @@ class Game(object):
     def update_player(self, core):
         self.get_player().update(core)
 
-    def update_entities(self, core):
+    def update_targets(self, core):
+        if len(self.targets) < MAX_TARGETS:
+            self.targets.append(Targets())
         for target in self.targets:
             target.update(core)
             if not self.in_event:
@@ -147,7 +148,7 @@ class Game(object):
     def update(self, core):
 
         # All targets
-        self.update_entities(core)
+        self.update_targets(core)
 
         if not core.get_game().in_event:
             self.update_player(core)
@@ -161,9 +162,9 @@ class Game(object):
         self.update_time(core)
         self.update_score_time()
 
-    def render_map(self, core):
+    def render_sky(self, core):
         """
-        Rendering only tiles. It's used in main menu.
+        Rendering only sky. It's used in main menu.
         """
         core.screen.blit(self.sky, (0, 0))
 
@@ -177,7 +178,7 @@ class Game(object):
             target.render(core)
 
         for text_object in self.text_objects:
-            text_object.render_in_game(core)
+            text_object.render(core)
 
         self.get_player().render(core)
 
